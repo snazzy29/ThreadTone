@@ -5,7 +5,7 @@ import numpy as np
 # Parameters
 imgRadius = 500     # Number of pixels that the image radius is resized to
 
-initPin = 0         # Initial pin to start threading from 
+initPin = 0         # Initial pin to start threading from
 numPins = 200       # Number of pins on the circular loom
 numLines = 1000     # Maximal number of lines
 
@@ -60,14 +60,14 @@ while argNum < len(args):
     else:
         print("Invalid flag: " + args[argNum])
         sys.exit(1)
-        
+
 # \/main processes
 banner = """
-   __  __                        ________               
-  / /_/ /_  ________  ____ _____/ /_  __/___  ____  ___ 
+   __  __                        ________
+  / /_/ /_  ________  ____ _____/ /_  __/___  ____  ___
  / __/ __ \/ ___/ _ \/ __ `/ __  / / / / __ \/ __ \/ _ \\
 / /_/ / / / /  /  __/ /_/ / /_/ / / / / /_/ / / / /  __/
-\__/_/ /_/_/   \___/\__,_/\__,_/ /_/  \____/_/ /_/\___/ 
+\__/_/ /_/_/   \___/\__,_/\__,_/ /_/  \____/_/ /_/\___/
 
 Build a thread based halftone representation of an image
 (Press: ctrl+c in this terminal window to kill the drawing)
@@ -132,7 +132,7 @@ if __name__=="__main__":
     cv2.imwrite('./gray.png', imgGray)
 
     # Resize image
-    imgSized = cv2.resize(imgGray, (2*imgRadius + 1, 2*imgRadius + 1)) 
+    imgSized = cv2.resize(imgGray, (2*imgRadius + 1, 2*imgRadius + 1))
 
     # Invert image
     imgInverted = invertImage(imgSized)
@@ -197,8 +197,8 @@ if __name__=="__main__":
         # plot results
         xLine, yLine = linePixels(coords[bestPin], coord)
         imgResult[yLine, xLine] = 0
-        cv2.imshow('image', imgResult)
-        cv2.waitKey(1)
+        #cv2.imshow('image', imgResult)
+        #cv2.waitKey(1)
 
         # Break if no lines possible
         if bestPin == oldPin:
@@ -216,8 +216,8 @@ if __name__=="__main__":
     print("\n[+] Image threaded")
 
     # Wait for user and save before exit
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     cv2.imwrite('./threaded.png', imgResult)
 
     svg_output = open('threaded.svg','wb')
