@@ -1,17 +1,18 @@
 import sys
 import cv2
 import numpy as np
+import json
 
 # Parameters
 imgRadius = 500     # Number of pixels that the image radius is resized to
 
 initPin = 0         # Initial pin to start threading from
 numPins = 200       # Number of pins on the circular loom
-numLines = 1000     # Maximal number of lines
+numLines = 1000      # Maximal number of lines
 
 minLoop = 3         # Disallow loops of less than minLoop lines
 lineWidth = 3       # The number of pixels that represents the width of a thread
-lineWeight = 15     # The weight a single thread has in terms of "darkness"
+lineWeight = 20     # The weight a single thread has in terms of "darkness"
 
 helpMessage = """
 To use this tool, run:
@@ -226,17 +227,26 @@ if __name__=="__main__":
     """ % (width, height)
     footer="</svg>"
     svg_output.write(header.encode('utf8'))
-    pather = lambda d : '<path d="%s" stroke="black" stroke-width="0.5" fill="none" />\n' % d
-    pathstrings=[]
-    pathstrings.append("M" + "%i %i" % coords[lines[0][0]] + " ")
-    for l in lines:
-        nn = coords[l[1]]
-        pathstrings.append("L" + "%i %i" % nn + " ")
-    pathstrings.append("Z")
-    d = "".join(pathstrings)
-    svg_output.write(pather(d).encode('utf8'))
+
+    def pather(id, d):
+        return '<path id="path{}" d="{}" stroke="black" stroke-width="0.5" fill="none" />\n'.format(id, d)
+
+    linedata=[]
+
+    for id in range(len(lines)):
+        l = lines[id]
+        pathstrings=[]
+        pathstrings.append("M" + "%i %i" % coords[l[0]] + " ")
+        pathstrings.append("L" + "%i %i" % coords[l[1]] + " ")
+        pathstrings.append("Z")
+        d = "".join(pathstrings)
+        svg_output.write(pather(id, d).encode('utf8'))
+
+        linedata.append({"id": '#path' + str(id), "d": d})
     svg_output.write(footer.encode('utf8'))
     svg_output.close()
+    with open('linedata.json', 'w') as outfile:
+        json.dump(linedata, outfile)
 
     csv_output = open('threaded.csv','wb')
     csv_output.write("x1,y1,x2,y2\n".encode('utf8'))
