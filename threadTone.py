@@ -2,6 +2,7 @@ import sys
 import cv2
 import numpy as np
 import json
+import os
 
 # Parameters
 imgRadius = 500     # Number of pixels that the image radius is resized to
@@ -221,7 +222,8 @@ if __name__=="__main__":
     #cv2.destroyAllWindows()
     cv2.imwrite('./threaded.png', imgResult)
 
-    svg_output = open('threaded.svg','wb')
+    corename,ext = os.path.splitext(os.path.basename(imgPath))
+    svg_output = open('svg_output/'+corename+'.svg','wb')
     header="""<?xml version="1.0" standalone="no"?>
     <svg width="%i" height="%i" version="1.1" xmlns="http://www.w3.org/2000/svg">
     """ % (width, height)
@@ -245,7 +247,7 @@ if __name__=="__main__":
         linedata.append({"id": '#path' + str(id), "d": d})
     svg_output.write(footer.encode('utf8'))
     svg_output.close()
-    with open('linedata.json', 'w') as outfile:
+    with open('json_output/'+corename+'.json', 'w') as outfile:
         json.dump(linedata, outfile)
 
     csv_output = open('threaded.csv','wb')
