@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>STEM diversity loom art</title>
+<style>
+svg {
+  display: block;
+  margin: 0 auto;
+}
+
+path {
+  fill: none;
+  stroke: black;
+  stroke-width: 0.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+</style>
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+<body translate="no">
+
+[[svg]]
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.0/anime.min.js'></script>
+<script id="rendered-js">
+
+var images = [[data]]
+
+
+//var paths = images[1]
+
+
+var timeline = anime.timeline({ autoplay: true, direction: 'normal', loop: true });
+imagelength = 10000
+images.forEach(function (paths, imageindex) {
+
+
+paths.forEach(function (path, index) {
+  timeline.
+  add({
+    targets: path.id,
+    d: {
+      value: path.d,
+      duration: 500,
+      easing: 'linear'
+  },
+    offset: (imagelength * imageindex) + (5 * index),
+        //delay:  index * 10
+
+  });
+});
+
+
+
+/*
+timeline.
+add({
+  targets: 'path:first-child',
+  opacity: {
+    value: 1,
+    duration: 1000,
+    easing: 'easeInOutQuad' },
+
+  offset: (imagelength * imageindex) + 2000 + 10 * paths.length });
+  */
+
+});
+//# sourceURL=pen.js
+    </script>
+</body>
+</html>
