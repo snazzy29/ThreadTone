@@ -9,7 +9,7 @@ imgRadius = 500     # Number of pixels that the image radius is resized to
 
 initPin = 0         # Initial pin to start threading from
 numPins = 200       # Number of pins on the circular loom
-numLines = 1000      # Maximal number of lines
+numLines = 500      # Maximal number of lines
 
 minLoop = 3         # Disallow loops of less than minLoop lines
 lineWidth = 3       # The number of pixels that represents the width of a thread
@@ -174,14 +174,18 @@ if __name__=="__main__":
 
             coord = coords[pin]
 
-            xLine, yLine = linePixels(oldCoord, coord)
+            for index2 in range(0, numPins):
+                coord2 = coords[index2]
+                xLine, yLine = linePixels(coord, coord2)
+                #print(xLine, yLine)
 
-            # Fitness function
-            lineSum = np.sum(imgMasked[yLine, xLine])
+                # Fitness function
+                lineSum = np.sum(imgMasked[yLine, xLine])
 
-            if (lineSum > bestLine) and not(pin in previousPins):
-                bestLine = lineSum
-                bestPin = pin
+                if (lineSum > bestLine) and not(pin in previousPins):
+                    bestLine = lineSum
+                    bestPin = pin
+                    bestPin2 = index2
 
         # Update previous pins
         if len(previousPins) >= minLoop:
@@ -190,14 +194,14 @@ if __name__=="__main__":
 
         # Subtract new line from image
         lineMask = lineMask * 0
-        cv2.line(lineMask, oldCoord, coords[bestPin], lineWeight, lineWidth)
+        cv2.line(lineMask, coords[bestPin], coords[bestPin2], lineWeight, lineWidth)
         imgMasked = np.subtract(imgMasked, lineMask)
 
         # Save line to results
         lines.append((oldPin, bestPin))
 
         # plot results
-        xLine, yLine = linePixels(coords[bestPin], coord)
+        xLine, yLine = linePixels(coords[bestPin], coords[bestPin2])
         imgResult[yLine, xLine] = 0
         #cv2.imshow('image', imgResult)
         #cv2.waitKey(1)
@@ -231,7 +235,7 @@ if __name__=="__main__":
     svg_output.write(header.encode('utf8'))
 
     def pather(id, d):
-        return '<path id="path{}" d="{}" stroke="black" stroke-width="0.5" fill="none" />\n'.format(id, d)
+        return '<path id="path{}" d="{}" stroke="#444444" stroke-width="0.5" fill="none" />\n'.format(id, d)
 
     linedata=[]
 
