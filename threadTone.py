@@ -9,7 +9,7 @@ imgRadius = 500     # Number of pixels that the image radius is resized to
 
 initPin = 0         # Initial pin to start threading from
 numPins = 200       # Number of pins on the circular loom
-numLines = 500      # Maximal number of lines
+numLines = 5      # Maximal number of lines
 
 minLoop = 3         # Disallow loops of less than minLoop lines
 lineWidth = 3       # The number of pixels that represents the width of a thread
@@ -194,8 +194,9 @@ if __name__=="__main__":
 
         # Subtract new line from image
         lineMask = lineMask * 0
-        cv2.line(lineMask, coords[bestPin], coords[bestPin2], lineWeight, lineWidth)
-        imgMasked = np.subtract(imgMasked, lineMask)
+        lineMask2 = cv2.line(lineMask, coords[bestPin], coords[bestPin2], lineWeight, lineWidth)
+        imgMasked = np.subtract(imgMasked, lineMask2)
+        #cv2.imwrite('./masked2.png', imgMasked)
 
         # Save line to results
         lines.append((oldPin, bestPin))
